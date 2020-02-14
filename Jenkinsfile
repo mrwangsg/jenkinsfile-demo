@@ -1,5 +1,8 @@
 pipeline {
     agent { docker 'maven:3.3.3' }
+    tools {
+        maven 'maven3.6.3'
+    }
     stages {
         stage('build') {
             steps {
