@@ -9,6 +9,7 @@ pipeline {
         stage('package') {
             steps {
                 sh 'java -version'
+                sh 'mvn package -Dmaven.test.skip=true'
             }
         }
         stage('test') {
