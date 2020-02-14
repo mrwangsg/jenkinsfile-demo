@@ -6,5 +6,15 @@ pipeline {
                 sh 'mvn --version'
             }
         }
+        stage('package') {
+            steps {
+                sh 'java -version'
+            }
+        }
+        stage('test') {
+            steps {
+                sh 'mvn --version'
+            }
+        }
     }
 }
