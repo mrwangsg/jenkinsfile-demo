@@ -4,11 +4,12 @@ pipeline {
         stage('build') {
             steps {
                 sh 'mvn --version'
+                sh 'java -version'
+                sh 'pwd'
             }
         }
         stage('package') {
             steps {
-                sh 'java -version'
                 sh 'mvn package -Dmaven.test.skip=true'
             }
         }
