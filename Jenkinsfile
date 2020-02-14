@@ -10,7 +10,7 @@ pipeline {
         }
         stage('package') {
             steps {
-                sh 'mvn --settings /usr/local/apache-maven-3.6.3/conf/settings.xml install -Dmaven.test.skip=true'
+                sh 'mvn install --settings /usr/local/apache-maven-3.6.3/conf/settings.xml -Dmaven.test.skip=true'
             }
         }
         stage('test') {
