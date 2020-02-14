@@ -11,7 +11,7 @@ pipeline {
             steps {
                 sh 'pwd'
                 sh 'ls'
-                sh 'mvn package --settings /usr/local/apache-maven-3.6.3/conf/settings.xml -Dmaven.test.skip=true'
+                sh 'mvn clean install -settings=/usr/local/apache-maven-3.6.3/conf/settings.xml -Dmaven.test.skip=true'
             }
         }
         stage('test') {
