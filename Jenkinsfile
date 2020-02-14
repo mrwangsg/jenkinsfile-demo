@@ -1,5 +1,5 @@
 pipeline {
-    agent { docker 'maven:3.3.3' }
+    agent any
     tools {
         maven 'maven3.6.3'
     }
