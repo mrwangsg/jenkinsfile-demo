@@ -28,7 +28,6 @@
         <dependency>
             <groupId>com.cdancy</groupId>
             <artifactId>jenkins-rest</artifactId>
-            <version>X.Y.Z</version>
             <classifier>all</classifier>
         </dependency>
     </dependencies>
