@@ -1,14 +1,17 @@
 pipeline {
-    agent { docker 'maven:3.3.3' }
+    agent any
     stages {
         stage('build') {
             steps {
                 sh 'mvn --version'
+                sh 'java -version'
             }
         }
         stage('package') {
             steps {
-                sh 'java -version'
+                sh 'pwd'
+                sh 'ls'
+                sh 'mvn clean package -Dmaven.test.skip=true'
             }
         }
         stage('test') {
