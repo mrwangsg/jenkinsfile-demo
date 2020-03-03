@@ -75,10 +75,6 @@ public class JenkinsServerDemo {
             String keyStr = entry.getKey();
             List<Build> buildList = entry.getValue();
 
-            if (!"normal-demo".equals(keyStr)){
-                continue;
-            }
-
             for (Build build : buildList) {
                 logger.error("keyStr: " + keyStr + "   number: " + build.getNumber() + "   queueId: " + build.getQueueId() + "   url: " + build.getUrl() + "   class: " + build.get_class());
                 // 不要轻易调用 目前并没发现这两个方法有什么用
