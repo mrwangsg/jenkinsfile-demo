@@ -76,7 +76,7 @@ public class JenkinsServerDemo {
             List<Build> buildList = entry.getValue();
 
             for (Build build : buildList) {
-                logger.error("keyStr: " + keyStr + "   number: " + build.getNumber() + "   queueId: " + build.getQueueId() + "   url: " + build.getUrl() + "   class: " + build.get_class());
+                logger.error("keyStr: " + keyStr + "   number: " + build.getNumber() + "   queueId: " + build.getQueueId() + "   url: " + build.getUrl());
                 // 不要轻易调用 目前并没发现这两个方法有什么用
                 // logger.error("testReport: " + build.getTestReport() + "   testResult: " + build.getTestResult());
             }
