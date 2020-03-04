@@ -12,11 +12,11 @@ import java.net.URISyntaxException;
  * @name SgJenkinsServer
  * @user Anti
  * @创建时间 2020/3/3
- * @描述 双重校验锁法 单例模式
+ * @描述 双重校验锁法 单例模式. (存在DCL失效缺陷)
  */
 public class SgJenkinsServer {
     private static Logger logger = LoggerFactory.getLogger(SgJenkinsServer.class);
-    private static JenkinsServer instance = null;
+    private static volatile JenkinsServer instance = null; // 因为初始化对象的乱序型，需要加关键字volatile
 
     private SgJenkinsServer() {
     }
