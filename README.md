@@ -6,3 +6,5 @@
 分支：boot-jenkins-client-test，测试jenkins-client开源库，看是否轻巧调用Jenkins rest api；
 
 分支：boot-jenkins-rest-test，测试jenkins-rest开源库，看是否轻巧调用Jenkins rest api；
+
+分支：boot-jenkins-blueocean-test，调用blueocean-rest，分装好的api接口；
