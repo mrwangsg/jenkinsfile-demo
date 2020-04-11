@@ -2,6 +2,7 @@ pipeline {
     agent any
     stages {
         stage('build') {
+            agent { docker 'maven:3.6.3-jdk-8' }
             steps {
                 sh 'mvn --version'
                 sh 'java -version'
