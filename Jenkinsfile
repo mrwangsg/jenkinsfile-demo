@@ -1,6 +1,11 @@
 pipeline {
     agent any
     stages {
+        stage('env') {
+            steps {
+                sh 'source /etc/profile'
+            }
+        }
         stage('build') {
             steps {
                 sh 'mvn --version'
