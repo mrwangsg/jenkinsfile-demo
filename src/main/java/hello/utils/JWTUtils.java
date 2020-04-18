@@ -1,10 +1,13 @@
 package hello.utils;
 
-import java.text.DateFormat;
-import java.text.ParseException;
+import hello.pojo.JWTTokenHeader;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
 
 /**
  * @创建人 sgwang
@@ -22,7 +25,33 @@ public class JWTUtils {
     public final static String Header_Server = "Server";
 
     /**
+     * 获取token
+     * @return JWTTokenHeader
+     * @throws IOException
+     */
+    public static JWTTokenHeader getToken() throws IOException {
+        OkHttpClient okHttpClient = OkHttpClientUtil.getInstance();
+
+        Request req = new Request.Builder().url(JWTUtils.Token_URL).build();
+        Response resp = okHttpClient.newCall(req).execute();
+
+        if (!resp.isSuccessful()) {
+            throw new IOException("Server error: " + resp);
+        }
+
+        // 保存信息
+        JWTTokenHeader jwtTokenHeader = new JWTTokenHeader();
+        jwtTokenHeader.setDate(JWTUtils.formatDate(resp.header(JWTUtils.Header_Date)));
+        jwtTokenHeader.setxContentTypeOptions(resp.header(JWTUtils.Header_XContentTypeOptions));
+        jwtTokenHeader.setxBlueOceanJWT(resp.header(JWTUtils.Header_XBlueOceanJWT));
+        jwtTokenHeader.setServer(resp.header(JWTUtils.Header_Server));
+
+        return jwtTokenHeader;
+    }
+
+    /**
      * 将日期格式均为ISO 8601格式："YYYY-MM-DDTHH:MM:SSZ" 转化为 UTC时间格式："yyyy-MM-ddTHH:mm:ssXXX"
+     *
      * @param dateStr
      * @return String
      */

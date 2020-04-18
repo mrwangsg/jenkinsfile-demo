@@ -12,6 +12,5 @@ import java.io.IOException;
  * @描述
  */
 public interface BlueOceanHttpClient {
-    JWTTokenHeader getToken(String tokenURL) throws IOException;
-    void doGet(String accessToken) throws IOException;
+    void doGet(String getURL, String accessToken) throws IOException;
 }

@@ -4,6 +4,8 @@ import hello.pojo.JWTTokenHeader;
 import hello.utils.JWTUtils;
 import hello.utils.OkHttpClientUtil;
 import okhttp3.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -19,44 +21,49 @@ public class BlueOceanHttpClientImpl implements BlueOceanHttpClient {
     public static void main(String[] args) throws IOException {
         BlueOceanHttpClient blueOceanHttpClient = new BlueOceanHttpClientImpl();
 
-        JWTTokenHeader jwtTokenHeader = blueOceanHttpClient.getToken(JWTUtils.Token_URL);
+        JWTTokenHeader jwtTokenHeader = JWTUtils.getToken();
         System.err.println(jwtTokenHeader);
 
-        blueOceanHttpClient.doGet(jwtTokenHeader.getxBlueOceanJWT());
-    }
-
-    public JWTTokenHeader getToken(String tokenURL) throws IOException {
-        OkHttpClient okHttpClient = OkHttpClientUtil.getInstance();
-
-        Request req = new Request.Builder().url(tokenURL).build();
-        Response resp = okHttpClient.newCall(req).execute();
-
-        if (!resp.isSuccessful()) {
-            throw new IOException("Server error: " + resp);
-        }
-
-        // 保存信息
-        JWTTokenHeader jwtTokenHeader = new JWTTokenHeader();
-        jwtTokenHeader.setDate(JWTUtils.formatDate(resp.header(JWTUtils.Header_Date)));
-        jwtTokenHeader.setxContentTypeOptions(resp.header(JWTUtils.Header_XContentTypeOptions));
-        jwtTokenHeader.setxBlueOceanJWT(resp.header(JWTUtils.Header_XBlueOceanJWT));
-        jwtTokenHeader.setServer(resp.header(JWTUtils.Header_Server));
-
-        return jwtTokenHeader;
-    }
-
-    public void doGet(String accessToken) throws IOException {
-        OkHttpClient okHttpClient = OkHttpClientUtil.getInstance();
-        okHttpClient = okHttpClient.newBuilder().authenticator(
-                new Authenticator() {
-                    public Request authenticate(Route route, Response response) throws IOException {
-                        return response.request().newBuilder().header("Authorization", "Bearer " + accessToken).build();
-                    }
-                }).build();
-
         String url = "http://118.31.54.101:8080/blue/rest/organizations/jenkins/pipelines/";
+        blueOceanHttpClient.doGet(url, jwtTokenHeader.getxBlueOceanJWT());
+    }
 
-        Request request = new Request.Builder().url(url).build();
+
+    @Override
+    public void doGet(String getURL, String accessToken) throws IOException {
+        OkHttpClient okHttpClient = OkHttpClientUtil.getInstance();
+
+        // 发送请求前，先设置token值
+        Request request = new Request.Builder()
+                .url(getURL)
+//                .addHeader("Authorization", "Bearer " + accessToken)
+                .addHeader("Content-Type", "application/json")
+                .build();
+        System.err.println(request.headers().toString());
+
+        // 如果请求响应码 == 401，会调用authenticate接口，进行重新请求；
+        okHttpClient
+                .newBuilder()
+                .authenticator(
+                        new Authenticator() {
+                            @Nullable
+                            @Override
+                            public Request authenticate(@Nullable Route route, @NotNull Response response) throws IOException {
+                                // 重新获取token
+                                JWTTokenHeader jwtTokenHeader = JWTUtils.getToken();
+                                String blueOceanToken = jwtTokenHeader.getxBlueOceanJWT();
+                                System.err.println("authenticate access token : " + blueOceanToken);
+
+                                Request authReq = response.request();
+                                authReq.newBuilder().header("Authorization", "Bearer " + blueOceanToken).build();
+                                System.err.println("authenticate headers: " + authReq.headers().toString());
+
+                                return authReq;
+                            }
+                        }
+                )
+                .build();
+
 
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
