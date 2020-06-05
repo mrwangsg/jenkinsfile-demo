@@ -25,6 +25,14 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.kingstar</groupId>
+            <artifactId>ojdbc</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/ojdbc-1.0.0.jar</systemPath>
+        </dependency>
+
         <!--Jenkins rest api lib url: https://github.com/jenkinsci/java-client-api -->
         <dependency>
             <groupId>com.offbytwo.jenkins</groupId>
